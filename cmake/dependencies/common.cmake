@@ -73,7 +73,7 @@ if(NOT EXCLUDE_MPQ_SUPPORT)
     list(APPEND ADDITIONAL_LIB_INCLUDES ${stormlib_SOURCE_DIR}/src)
     #this was in lus switch version
     if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
-        target_compile_definitions(StormLib PRIVATE -D_POSIX_C_SOURCE=200809L)
+        target_compile_definitions(storm PRIVATE -D_POSIX_C_SOURCE=200809L)
     endif()
 endif()
 
