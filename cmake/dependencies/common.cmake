@@ -2,6 +2,10 @@ include(FetchContent)
 
 find_package(OpenGL QUIET)
 
+if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
+    target_include_directories(ImGui PRIVATE ${DEVKITPRO}/portlibs/switch/include/SDL2)
+endif()
+
 # When using the Visual Studio generator, it is necessary to suppress stderr output entirely so it does not interrupt the patch command.
 # Redirecting to nul is used here instead of the `--quiet` flag, as that flag was only recently introduced in git 2.25.0 (Jan 2022)
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
@@ -34,11 +38,25 @@ target_sources(ImGui
     ${imgui_SOURCE_DIR}/imgui.cpp
 )
 
-target_sources(ImGui
-    PRIVATE
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
-)
+if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
+    target_include_directories(ImGui PRIVATE ${DEVKITPRO}/portlibs/switch/include/)
+endif()
+
+#only use sdl2 if it's switch
+if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
+    target_sources(ImGui
+            PRIVATE
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+    )
+else()
+    target_sources(ImGui
+            PRIVATE
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+    )
+endif()
+
+
 
 target_include_directories(ImGui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends PRIVATE ${SDL2_INCLUDE_DIRS})
 
@@ -57,6 +75,10 @@ if(NOT EXCLUDE_MPQ_SUPPORT)
     )
     FetchContent_MakeAvailable(StormLib)
     list(APPEND ADDITIONAL_LIB_INCLUDES ${stormlib_SOURCE_DIR}/src)
+    #this was in lus switch version
+    if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
+        target_compile_definitions(StormLib PRIVATE -D_POSIX_C_SOURCE=200809L)
+    endif()
 endif()
 
 #=================== STB ===================
