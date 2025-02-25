@@ -8,7 +8,7 @@
 #include "Context.h"
 #include "audio/Audio.h"
 
-#include <ImGui/imgui_internal.h>
+#include <imgui_internal.h>
 
 #define DOCKED_MODE 1
 #define HANDHELD_MODE 0
