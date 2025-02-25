@@ -593,7 +593,7 @@ static void gfx_sdl_handle_single_event(SDL_Event& event) {
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
 #ifdef __SWITCH__
                     Ship::Switch::GetDisplaySize(&window_width, &window_height);
-#eldef __APPLE__
+#elif __APPLE__
                     SDL_GetWindowSize(wnd, &window_width, &window_height);
 #else
                     SDL_GL_GetDrawableSize(wnd, &window_width, &window_height);
