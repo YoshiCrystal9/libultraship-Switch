@@ -74,7 +74,7 @@ file(GLOB Source_Files__Log RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "log/*.h" "log/
 
 source_group("log" FILES ${Source_Files__Log})
 
-target_sources(libultraship PRIVATE ${Source_Files__Log})
+target_sources(libultraship PRIVATE ${Source_Files__Log} ${Source_Files__Log__SPDLog})
 
 #=================== Window ===================
 
@@ -166,12 +166,12 @@ target_sources(libultraship PRIVATE ${Source_Files__Graphic_Debug})
 
 target_include_directories(libultraship
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../extern ${CMAKE_CURRENT_BINARY_DIR} $<$<BOOL:${GFX_DEBUG_DISASSEMBLER}>:${CMAKE_CURRENT_SOURCE_DIR}/../../ZAPDTR/lib/libgfxd>
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${INCLUDE_DIR} ${ADDITIONAL_LIB_INCLUDES}
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../extern/spdlog/include/spdlog ${CMAKE_CURRENT_SOURCE_DIR} ${INCLUDE_DIR} ${ADDITIONAL_LIB_INCLUDES}
 )
 
 #=================== Linking ===================
 if(NOT EXCLUDE_MPQ_SUPPORT)
-    if (NOT CMAKE_SYSTEM_NAME STREQUAL "Windows" AND NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    if (NOT CMAKE_SYSTEM_NAME STREQUAL "Windows" AND NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
         target_link_libraries(libultraship PUBLIC "$<LINK_LIBRARY:WHOLE_ARCHIVE,storm>")
     else()
         target_link_libraries(libultraship PUBLIC storm)
@@ -179,7 +179,7 @@ if(NOT EXCLUDE_MPQ_SUPPORT)
 endif()
 
 target_link_libraries(libultraship
-    PUBLIC ImGui
+    PUBLIC ImGui tinyxml2
 )
 
 target_link_libraries(libultraship PRIVATE stb)
@@ -194,11 +194,19 @@ target_link_libraries(libultraship PRIVATE libzip::zip)
 find_package(nlohmann_json REQUIRED)
 target_link_libraries(libultraship PUBLIC nlohmann_json::nlohmann_json)
 
-find_package(tinyxml2 REQUIRED)
-target_link_libraries(libultraship PUBLIC tinyxml2::tinyxml2)
+if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
+    set(TINYXML2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../extern/tinyxml2)
+    add_library(tinyxml2 STATIC)
 
-find_package(spdlog REQUIRED)
-target_link_libraries(libultraship PUBLIC spdlog::spdlog)
+    target_sources(tinyxml2 PRIVATE ${TINYXML2_DIR}/tinyxml2.cpp)
+    target_include_directories(tinyxml2 PUBLIC ${TINYXML2_DIR})
+else ()
+    find_package(tinyxml2 REQUIRED)
+    target_link_libraries(libultraship PUBLIC tinyxml2::tinyxml2)
+
+    find_package(spdlog REQUIRED)
+    target_link_libraries(libultraship PUBLIC spdlog::spdlog)
+endif ()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(THREADS_PREFER_PTHREAD_FLAG ON)
