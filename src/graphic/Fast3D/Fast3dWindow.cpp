@@ -10,7 +10,9 @@
 #include "graphic/Fast3D/gfx_direct3d11.h"
 #include "graphic/Fast3D/gfx_direct3d12.h"
 #include "graphic/Fast3D/gfx_pc.h"
-
+#ifdef __SWITCH__
+#include "port/switch/SwitchImpl.h"
+#endif
 #include <fstream>
 
 namespace Fast {
@@ -259,6 +261,9 @@ uint32_t Fast3dWindow::GetCurrentRefreshRate() {
 }
 
 bool Fast3dWindow::SupportsWindowedFullscreen() {
+#ifdef __SWITCH__
+    return false;
+#endif
     if (GetWindowBackend() == Ship::WindowBackend::FAST3D_SDL_OPENGL ||
         GetWindowBackend() == Ship::WindowBackend::FAST3D_SDL_METAL) {
         return true;
