@@ -9,7 +9,7 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
 endif()
 
 #=================== ImGui ===================
-set(imgui_fixes_and_config_patch_file ${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies/patches/sdl-gamepad-fix.patch.patch)
+set(imgui_fixes_and_config_patch_file ${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies/patches/sdl-gamepad-fix.patch)
 set(imgui_switch_fixes ${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies/patches/SWITCH-IMGUI.patch)
 
 # Applies the patch or checks if it has already been applied successfully previously. Will error otherwise.
