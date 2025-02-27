@@ -10,14 +10,17 @@ endif()
 
 #=================== ImGui ===================
 set(imgui_fixes_and_config_patch_file ${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies/patches/combined.patch)
+set(imgui_switch_patch_file ${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies/patches/SWITCH-IMGUI.patch)
 
 # Applies the patch or checks if it has already been applied successfully previously. Will error otherwise.
 set(imgui_apply_patch_if_needed git apply ${imgui_fixes_and_config_patch_file} ${git_hide_output} || git apply --reverse --check ${imgui_fixes_and_config_patch_file})
+set(imgui_apply_switchpatch_if_needed git apply ${imgui_switch_patch_file} ${git_hide_output} || git apply --reverse --check ${imgui_switch_patch_file})
 FetchContent_Declare(
     ImGui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.91.6-docking
     PATCH_COMMAND ${imgui_apply_patch_if_needed}
+    PATCH_COMMAND ${imgui_apply_switchpatch_if_needed}
 )
 FetchContent_MakeAvailable(ImGui)
 list(APPEND ADDITIONAL_LIB_INCLUDES ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
