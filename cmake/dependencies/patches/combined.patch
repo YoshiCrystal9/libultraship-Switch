@@ -5,9 +5,9 @@ Subject: [PATCH] Combined SDL gamepad fix, config updates, and SWITCH-IMGUI chan
 
 ---
  backends/imgui_impl_sdl2.cpp | 3 ---
- imconfig.h                   | 7 +++++++
+ imconfig.h                   | 10 ++++++++++
  imgui.cpp                    | 5 +++++
- 3 files changed, 12 insertions(+), 3 deletions(-)
+ 3 files changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/backends/imgui_impl_sdl2.cpp b/backends/imgui_impl_sdl2.cpp
 index 23f12796..a7fef045 100644
@@ -37,7 +37,7 @@ index 8f8bc3b9..e1f2a1a6 100644
  
  //---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
  // Your renderer backend will need to support it (most example renderer backends support both 16/32-bit indices).
-@@ -140,3 +140,10 @@ namespace ImGui
+@@ -140,3 +140,12 @@ namespace ImGui
      void MyFunction(const char* name, MyMatrix44* mtx);
  }
  */
