@@ -41,19 +41,11 @@ if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
     target_include_directories(ImGui PRIVATE ${DEVKITPRO}/portlibs/switch/include/SDL2)
 endif()
 
-#only use sdl2 if it's switch
-if (CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch")
-    target_sources(ImGui
-            PRIVATE
-            ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
-    )
-else()
-    target_sources(ImGui
-            PRIVATE
-            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-            ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
-    )
-endif()
+target_sources(ImGui
+        PRIVATE
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+)
 
 
 
