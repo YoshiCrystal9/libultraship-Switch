@@ -52,8 +52,6 @@ std::shared_ptr<ControllerRumbleMapping> RumbleMappingFactory::CreateRumbleMappi
         }
 		#ifdef __SWITCH__
 			bool SDL_GameControllerHasRumble = false;
-		#else
-			bool SDL_GameControllerHasRumble = SDL_GameControllerHasRumble(gamepad);
 		#endif
 
         for (int32_t button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_MAX; button++) {
